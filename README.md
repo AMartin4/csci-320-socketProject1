@@ -66,7 +66,7 @@ The client should:
 	<li>If the length of the chunk read is 0, then go to step 9. No more chunks to read and send.</li>
 	<li>Repeat steps 8a - 8d</li>
 	</ol>
-9. Send the server the calculated hash value as a byte string.
+9. Send the server the calculated hash digest (**NOT hexdigest**) as a byte string.
 10. Receive a `b'success'` or `b'failed'` message.  
 11. If a `b'failed'` message is received, ```raise Exception('Transfer failed!')``` else `print('Transfer completed!')`
 12. Close the client socket. **(Implemented)**
