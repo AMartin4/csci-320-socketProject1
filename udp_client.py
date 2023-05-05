@@ -43,7 +43,7 @@ def send_file(filename: str):
         # open the file to be transferred
         with open(file_name, 'rb') as file:
             # read the file in chunks and send each chunk to the server
-
+            chunk = file.read(BUFFER_SIZE)
             while len(chunk) > 0:
                 file_hash.update(chunk)
                 client_socket.sendto(chunk, (IP, PORT))
@@ -51,11 +51,14 @@ def send_file(filename: str):
                 response_1, server_address = client_socket.recvfrom(BUFFER_SIZE)
                 if response_1 != b'received':
                     raise Exception('Bad server response - was not go ahead!')
+                else:
+                    if len(chunk) == 0:
+                        print("Nothing to be sent")
 
         # send the hash value so server can verify that the file was
         # received correctly.
-        hash_calculated = (file_hash.digest())
-        response_2, server_address = client_socket.sendto(hash_calculated, (IP, PORT))
+        client_socket.sendto(file_hash.digest(),(IP, PORT))
+        response_2, server_address = client_socket.recvfrom(BUFFER_SIZE)
 
         if response_2 == b'failed':
             raise Exception('Transfer failed!')

@@ -25,7 +25,7 @@ def upload_file(server_socket: socket, file_name: str, file_size: int):
             file.write(chunk)
             file_verify.update(chunk)
             server_socket.sendto(b'received', client_address)
-            if file_verify == file_size:
+            if byte_size == file_size:
                 break
 
     # get hash from client to verify
@@ -39,8 +39,6 @@ def upload_file(server_socket: socket, file_name: str, file_size: int):
         server_socket.sendto(b'failed', client_address)
 
 
-
-
 def start_server():
     # create a UDP socket and bind it to the specified IP and port
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -52,7 +50,7 @@ def start_server():
             message, client_address = server_socket.recvfrom(BUFFER_SIZE)
             # expecting an 8-byte byte string for file size followed by file name
             file_name, file_size = get_file_info(message)
-            server_socket.sendto(b'go head', client_address)
+            server_socket.sendto(b'go ahead', client_address)
             upload_file(server_socket, file_name, file_size)
     except KeyboardInterrupt as ki:
         pass
@@ -64,3 +62,4 @@ def start_server():
 
 if __name__ == '__main__':
     start_server()
+
