@@ -23,7 +23,7 @@ def send_file(filename: str):
     filesize = get_file_size(filename)
 
     # convert the file size to an 8-byte byte string using big endian
-    size = (filesize).to_bytes(8, byteorder='big')
+    size = filesize.to_bytes(8, byteorder='big')
 
     # create a SHA256 object to generate hash of file
     file_hash = hashlib.sha256()
